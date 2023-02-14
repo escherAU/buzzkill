@@ -80,21 +80,25 @@ def main():
         matching_anagrams = filter_by_valid_words(matching_anagrams, all_words)
 
         # Create a dictionary to group the anagrams by starting letter
-        anagrams_by_letter = defaultdict(list)
+        anagrams_by_letter = defaultdict(lambda: ([], 0))
         for anagram in matching_anagrams:
-            anagrams_by_letter[anagram[0]].append(anagram)
+            key = anagram[0]
+            anagrams, count = anagrams_by_letter[key]
+            anagrams.append(anagram)
+            anagrams_by_letter[key] = (anagrams, count + 1)
 
         # Sort the dictionary by key (starting letter)
         sorted_anagrams = sorted(anagrams_by_letter.items())
 
         # Print the matching anagrams, grouped by starting letter
         st.write("Matching words:")
-        for letter, anagrams in sorted_anagrams:
+        for letter, (anagrams, count) in sorted(anagrams_by_letter.items()):
             # Add a line break before the anagrams
-            st.write(f"\n<h2 style='font-size:24px'>{letter.upper()}:</h2>", unsafe_allow_html=True)
+            st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
             with st.container():
                 st.write(", ".join(anagrams))
+
 
 
 if __name__ == "__main__":
