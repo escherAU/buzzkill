@@ -9,7 +9,6 @@ from nltk.corpus import words
 nltk.download("words")
 word_list = set(words.words())
 
-
 def get_anagrams(common_pool, all_words):
     # Create a list to store the anagrams that can be made using the common pool
     matching_anagrams = []
@@ -23,16 +22,13 @@ def get_anagrams(common_pool, all_words):
     # Return the list of matching anagrams
     return matching_anagrams
 
-
 # Function to filter out words not containing the specified letter
 def filter_by_letter(anagrams, letter):
     return [word for word in anagrams if letter.upper() in word]
 
-
 # Function to filter out words that are not valid English words
 def filter_by_valid_words(anagrams, word_list):
     return [word for word in anagrams if word in word_list]
-
 
 # Main function to run the tool
 def main():
@@ -91,15 +87,13 @@ def main():
         sorted_anagrams = sorted(anagrams_by_letter.items())
 
         # Print the matching anagrams, grouped by starting letter
-        st.write("Matching words (Count):")
+        st.write(f"Matching words ({total_count}):")
         for letter, (anagrams, count) in sorted(anagrams_by_letter.items()):
             # Add a line break before the anagrams
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
             with st.container():
                 st.write(", ".join(anagrams))
-
-
 
 if __name__ == "__main__":
     main()
