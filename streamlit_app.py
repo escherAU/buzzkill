@@ -91,7 +91,7 @@ def main():
         sorted_anagrams = sorted(anagrams_by_letter.items())
 
         # Print the matching anagrams, grouped by starting letter
-        st.write("Matching words:")
+        st.write("Matching words (Count):")
         for letter, (anagrams, count) in sorted(anagrams_by_letter.items()):
             # Add a line break before the anagrams
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
