@@ -14,10 +14,10 @@ def get_anagrams(common_pool, all_words):
     matching_anagrams = []
 
     # Get all the anagrams that can be made using the letters in the common pool
-    for l in range(4, 21):
-        for word in all_words:
-            if len(word) == l and set(word.upper()) <= set(common_pool.upper()):
-                matching_anagrams.append(word.upper())
+    matching_anagrams = [word.upper() for word in all_words if len(word) >= 4 and set(word.upper()).issubset(set(common_pool.upper()))]
+
+    # Return the list of matching anagrams
+    return matching_anagrams
 
     # Return the list of matching anagrams
     return matching_anagrams
