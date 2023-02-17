@@ -52,16 +52,7 @@ def main():
 
     if all(c.isalpha() for c in common_pool) and len(common_pool) == 7:
         # Get a set of all English words
-        all_words = set(
-            word.upper()
-            for word in pd.read_csv(
-                "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt",
-                header=None,
-                skip_blank_lines=True,
-                na_filter=False,
-                dtype=str,
-            ).values.flatten()
-        )
+        all_words = set(word.upper() for word in words.words())
 
         # Call the get_anagrams function to get the matching anagrams
         matching_anagrams = get_anagrams(common_pool, all_words)
