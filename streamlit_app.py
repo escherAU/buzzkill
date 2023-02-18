@@ -82,8 +82,7 @@ def main():
             key = anagram[0]
             anagrams, count = anagrams_by_letter[key]
             anagrams.append(anagram)
-            anagrams_by_letter[key]
- = (anagrams, count + 1)
+            anagrams_by_letter[key] = (anagrams, count + 1)
 
         # Sort the dictionary by key (starting letter)
         sorted_anagrams = sorted(anagrams_by_letter.items())
