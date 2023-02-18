@@ -48,7 +48,7 @@ def main():
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Set the subtitle and center it
-    subtitle = "<div style='text-align: center; color: #F7DA21; padding: 10px;'>A companion to help solve the New York Times 'Spelling Bee' puzzle.</div>"
+    subtitle = "<div style='text-align: center; color: #F7DA21; padding: 10px; background-color: lightgrey;'>A companion to help solve the New York Times 'Spelling Bee' puzzle.</div>"
     st.markdown(subtitle, unsafe_allow_html=True)
 
     common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
