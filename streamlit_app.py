@@ -32,6 +32,19 @@ def filter_by_valid_words(anagrams, word_list):
 
 # Main function to run the tool
 def main():
+    
+    input_style = """
+    <style>
+    input[type="text"] {
+        border: 2px solid black;
+    }
+    </style>
+"""
+st.markdown(input_style, unsafe_allow_html=True)
+
+common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
+letter = st.text_input("Enter the center letter to filter the list:", key="filter_letter")
+
     # Set page title and color
     title_html = """
         <div style="background-color: #F7DA21; padding: 10px;">
