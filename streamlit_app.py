@@ -33,12 +33,12 @@ def filter_by_valid_words(anagrams, word_list):
 # Main function to run the tool
 def main():
     
-    input_style = """
-    <style>
-    input[type="text"] {
-        border: 2px solid black;
-    }
-    </style>
+input_style = """
+ <style>
+ input[type="text"] {
+     border: 2px solid black;
+ }
+ </style>
 """
 st.markdown(input_style, unsafe_allow_html=True)
 
