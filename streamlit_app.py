@@ -19,9 +19,6 @@ def get_anagrams(common_pool, all_words):
     # Return the list of matching anagrams
     return matching_anagrams
 
-    # Return the list of matching anagrams
-    return matching_anagrams
-
 # Function to filter out words not containing the specified letter
 def filter_by_letter(anagrams, letter):
     return [word for word in anagrams if letter.upper() in word]
@@ -32,18 +29,18 @@ def filter_by_valid_words(anagrams, word_list):
 
 # Main function to run the tool
 def main():
-    
+
     input_style = """
     <style>
     input[type="text"] {
         border: 2px solid black;
     }
     </style>
-"""
-st.markdown(input_style, unsafe_allow_html=True)
+    """
+    st.markdown(input_style, unsafe_allow_html=True)
 
-common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
-letter = st.text_input("Enter the center letter to filter the list:", key="filter_letter")
+    common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
+    letter = st.text_input("Enter the center letter to filter the list:", key="filter_letter")
 
     # Set page title and color
     title_html = """
@@ -85,7 +82,8 @@ letter = st.text_input("Enter the center letter to filter the list:", key="filte
             key = anagram[0]
             anagrams, count = anagrams_by_letter[key]
             anagrams.append(anagram)
-            anagrams_by_letter[key] = (anagrams, count + 1)
+            anagrams_by_letter[key]
+ = (anagrams, count + 1)
 
         # Sort the dictionary by key (starting letter)
         sorted_anagrams = sorted(anagrams_by_letter.items())
