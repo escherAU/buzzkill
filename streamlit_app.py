@@ -82,11 +82,12 @@ def main():
             anagrams_by_letter[key] = (anagrams, count + 1)
 
         # Sort the dictionary by key (starting letter)
-        sorted_anagrams = sorted(anagrams_by_letter.items())
+        sorted_anagrams = sorted(anagrams_by_letter.items(), key=lambda x: (x[0], sorted(x[1][0])))
+
 
         # Print the matching anagrams, grouped by starting letter
         st.write("Matching words:")
-        for letter, (anagrams, count) in sorted(anagrams_by_letter.items()):
+        for letter, (anagrams, count) in sorted_anagrams:
             # Add a line break before the anagrams
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
