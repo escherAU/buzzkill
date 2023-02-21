@@ -90,10 +90,6 @@ def main():
             anagrams.append(anagram)
             anagrams_by_letter[key] = (anagrams, count + 1)
 
-        # Sort the dictionary by key (starting letter)
-        sorted_anagrams = sorted(anagrams_by_letter.items(), key=lambda x: (x[0], sorted(x[1][0])))
-
-
         # Print the matching anagrams, grouped by starting letter
         st.write("Matching words:")
         for letter, (anagrams, count) in sorted_anagrams:
