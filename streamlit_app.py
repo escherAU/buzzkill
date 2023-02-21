@@ -92,12 +92,17 @@ def main():
 
         # Print the matching anagrams, grouped by starting letter
         st.write("Matching words:")
+        # Sort the anagrams by starting letter and store them in a list of tuples
+        sorted_anagrams = sorted(anagrams_by_letter.items())
+        # Print the matching anagrams, grouped by starting letter
+        st.write("Matching words:")
         for letter, (anagrams, count) in sorted_anagrams:
             # Add a line break before the anagrams
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
             with st.container():
                 st.write(", ".join(anagrams))
+
 
 if __name__ == "__main__":
     main()
