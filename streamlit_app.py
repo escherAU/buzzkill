@@ -101,6 +101,7 @@ def main():
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
             with st.container():
+                anagrams.sort()
                 st.write(", ".join(anagrams))
 
 
