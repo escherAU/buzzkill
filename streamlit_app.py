@@ -90,8 +90,6 @@ def main():
             anagrams.append(anagram)
             anagrams_by_letter[key] = (anagrams, count + 1)
 
-        # Print the matching anagrams, grouped by starting letter
-        st.write("Matching words:")
         # Sort the anagrams by starting letter and store them in a list of tuples
         sorted_anagrams = sorted(anagrams_by_letter.items())
         # Print the matching anagrams, grouped by starting letter
