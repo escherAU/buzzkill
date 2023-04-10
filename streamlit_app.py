@@ -86,13 +86,13 @@ def main():
         # Create a dictionary to group the anagrams by starting letter
         anagrams_by_letter = defaultdict(lambda: ([], 0))
         for anagram in matching_anagrams:
-                    key = anagram[0]
-        anagrams, count = anagrams_by_letter[key]
-        anagrams.append(anagram)
-        anagrams_by_letter[key] = (anagrams, count + 1)
+            key = anagram[0]
+            anagrams, count = anagrams_by_letter[key]
+            anagrams.append(anagram)
+            anagrams_by_letter[key] = (anagrams, count + 1)
 
     # Sort the anagrams by starting letter and store them in a list of tuples
-    sorted_anagrams = sorted(anagrams_by_letter.items(), key=lambda x: x[0])
+    sorted_anagrams = sorted(anagrams_by_letter.items())
     # Print the matching anagrams, grouped by starting letter
     st.write("Matching words:")
     for letter, (anagrams, count) in sorted_anagrams:
