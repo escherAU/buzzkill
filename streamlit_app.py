@@ -54,9 +54,7 @@ def main():
     common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
     common_pool = common_pool.upper()
 
-    common_pool = common_pool.replace(
-        " ", ""
-    ).upper()  # remove spaces and convert to uppercase
+    common_pool = common_pool.replace(" ", "")
 
     if all(c.isalpha() for c in common_pool) and len(common_pool) == 7:
         # Get a set of all English words
