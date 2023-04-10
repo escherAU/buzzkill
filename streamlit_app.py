@@ -34,7 +34,6 @@ def main():
     <style>
     input[type="text"] {
         border: 2px solid black;
-        text-transform: uppercase;
     }
     </style>
     """
@@ -52,7 +51,7 @@ def main():
     subtitle = "<div style='text-align: center; color: black; padding: 10px; background-color: lightgrey; font-weight: bold;'>A helpful companion for solving the New York Times 'Spelling Bee' puzzle.</div>"
     st.markdown(subtitle, unsafe_allow_html=True)
 
-    common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool")
+    common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool").upper()
 
     common_pool = common_pool.replace(
         " ", ""
@@ -75,7 +74,7 @@ def main():
         matching_anagrams = get_anagrams(common_pool, all_words)
 
         # Ask the user to enter a letter to filter the anagrams
-        letter = st.text_input("Enter the center letter to filter the list:", key="filter_letter")
+        letter = st.text_input("Enter the center letter to filter the list:", key="filter_letter").upper()
         if letter:
             # Filter the anagrams by the specified letter
             matching_anagrams = filter_by_letter(matching_anagrams, letter)
@@ -91,17 +90,18 @@ def main():
             anagrams.append(anagram)
             anagrams_by_letter[key] = (anagrams, count + 1)
 
-    # Sort the anagrams by starting letter and store them in a list of tuples
-    sorted_anagrams = sorted(anagrams_by_letter.items())
-    # Print the matching anagrams, grouped by starting letter
-    st.write("Matching words:")
-    for letter, (anagrams, count) in sorted_anagrams:
-        # Add a line break before the anagrams
-        st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
-        # Wrap the anagrams so that they don't fall within the scrollbars
-        with st.container():
-            anagrams.sort()
-            st.write(", ".join(anagrams))
+        # Sort the anagrams by starting letter and store them in a list of tuples
+        sorted_anagrams = sorted(anagrams_by_letter.items())
+        # Print the matching anagrams, grouped by starting letter
+        st.write("Matching words:")
+        for letter, (anagrams, count) in sorted_anagrams:
+            # Add a line break before the anagrams
+            st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
+            # Wrap the anagrams so that they don't fall within the scrollbars
+            with st.container():
+                anagrams.sort()
+                st.write(", ".join(anagrams))
+
 
 if __name__ == "__main__":
     main()
