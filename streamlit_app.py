@@ -34,6 +34,7 @@ def main():
     <style>
     input[type="text"] {
         border: 2px solid black;
+        text-transform: uppercase;
     }
     </style>
     """
