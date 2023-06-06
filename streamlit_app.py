@@ -88,7 +88,7 @@ def main():
 
         sorted_anagrams = sorted(anagrams_by_letter.items())
 
-        st.write("Matching words:")
+        st.write("Matching words (pangrams in yellow):")
         for letter, (anagrams, count) in sorted_anagrams:
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             with st.container():
