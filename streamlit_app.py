@@ -10,22 +10,23 @@ nltk.download("words")
 word_list = set(words.words())
 
 def get_anagrams(common_pool, all_words):
-    # Create a list to store the anagrams that can be made using the common pool
     matching_anagrams = []
 
-    # Get all the anagrams that can be made using the letters in the common pool
-    matching_anagrams = [word.upper() for word in all_words if len(word) >= 4 and set(word.upper()).issubset(set(common_pool.upper()))]
+    for word in all_words:
+        if len(word) >= 4 and set(word.upper()).issubset(set(common_pool.upper())):
+            # The word is a pangram if it contains all letters in the common pool
+            is_pangram = set(word.upper()) == set(common_pool.upper())
+            matching_anagrams.append((word.upper(), is_pangram))
 
-    # Return the list of matching anagrams
     return matching_anagrams
 
 # Function to filter out words not containing the specified letter
 def filter_by_letter(anagrams, letter):
-    return [word for word in anagrams if letter.upper() in word]
+    return [(word, is_pangram) for word, is_pangram in anagrams if letter.upper() in word]
 
 # Function to filter out words that are not valid English words
 def filter_by_valid_words(anagrams, word_list):
-    return [word for word in anagrams if word in word_list]
+    return [(word, is_pangram) for word, is_pangram in anagrams if word in word_list]
 
 # Main function to run the tool
 def main():
@@ -85,10 +86,12 @@ def main():
 
         # Create a dictionary to group the anagrams by starting letter
         anagrams_by_letter = defaultdict(lambda: ([], 0))
-        for anagram in matching_anagrams:
+        for anagram, is_pApologies for the truncation of the response, here is the complete `main` function:
+
+        for anagram, is_pangram in matching_anagrams:
             key = anagram[0]
             anagrams, count = anagrams_by_letter[key]
-            anagrams.append(anagram)
+            anagrams.append((anagram, is_pangram))
             anagrams_by_letter[key] = (anagrams, count + 1)
 
         # Sort the anagrams by starting letter and store them in a list of tuples
@@ -100,8 +103,14 @@ def main():
             st.write(f"\n<h2 style='font-size:24px'>{letter.upper()} ({count}):</h2>", unsafe_allow_html=True)
             # Wrap the anagrams so that they don't fall within the scrollbars
             with st.container():
-                anagrams.sort()
-                st.write(", ".join(anagrams))
+                anagrams.sort(key=lambda x: x[0])  # sort by the word part of the tuple
+                anagrams_to_write = []
+                for word, is_pangram in anagrams:
+                    if is_pangram:
+                        anagrams_to_write.append(f"<span style='background-color: yellow'>{word}</span>")
+                    else:
+                        anagrams_to_write.append(word)
+                st.write(", ".join(anagrams_to_write), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
