@@ -87,11 +87,11 @@ def main():
         # Create a dictionary to group the anagrams by starting letter
         anagrams_by_letter = defaultdict(lambda: ([], 0))
             
-            for anagram, is_pangram in matching_anagrams:
-            key = anagram[0]
-            anagrams, count = anagrams_by_letter[key]
-            anagrams.append((anagram, is_pangram))
-            anagrams_by_letter[key] = (anagrams, count + 1)
+        for anagram, is_pangram in matching_anagrams:
+        key = anagram[0]
+        anagrams, count = anagrams_by_letter[key]
+        anagrams.append((anagram, is_pangram))
+        anagrams_by_letter[key] = (anagrams, count + 1)
 
         # Sort the anagrams by starting letter and store them in a list of tuples
         sorted_anagrams = sorted(anagrams_by_letter.items())
