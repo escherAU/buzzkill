@@ -86,7 +86,8 @@ def main():
 
         # Create a dictionary to group the anagrams by starting letter
         anagrams_by_letter = defaultdict(lambda: ([], 0))
-               for anagram, is_pangram in matching_anagrams:
+            
+            for anagram, is_pangram in matching_anagrams:
             key = anagram[0]
             anagrams, count = anagrams_by_letter[key]
             anagrams.append((anagram, is_pangram))
