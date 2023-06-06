@@ -96,7 +96,7 @@ def main():
                 anagrams_to_write = []
                 for word, is_pangram in anagrams:
                     if is_pangram:
-                        anagrams_to_write.append(f"<span style='background-color: yellow'>{word}</span>")
+                        anagrams_to_write.append(f"<span style='font-color: yellow; font-weight: bold;'>{word}</span>")
                     else:
                         anagrams_to_write.append(word)
                 st.write(", ".join(anagrams_to_write), unsafe_allow_html=True)
