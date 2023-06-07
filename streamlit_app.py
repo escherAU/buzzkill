@@ -12,16 +12,8 @@ word_list = set(words.words())
 def get_anagrams(common_pool, all_words):
     matching_anagrams = []
 
-    common_pool_dict = defaultdict(int)
-    for char in common_pool.upper():
-        common_pool_dict[char] += 1
-
     for word in all_words:
-        word_dict = defaultdict(int)
-        for char in word.upper():
-            word_dict[char] += 1
-
-        if len(word) >= 4 and all(common_pool_dict[char] >= count for char, count in word_dict.items()):
+        if len(word) >= 4 and set(word.upper()).issubset(set(common_pool.upper())):
             # The word is a pangram if it contains all letters in the common pool
             is_pangram = set(word.upper()) == set(common_pool.upper())
             matching_anagrams.append((word.upper(), is_pangram))
