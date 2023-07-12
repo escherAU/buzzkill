@@ -35,7 +35,17 @@ def main():
     """
     st.markdown(input_style, unsafe_allow_html=True)
 
-    # ... keep the rest of the setup code ...
+# Set page title and color
+    title_html = """
+        <div style="background-color: #F7DA21; padding: 10px;">
+            <h1 style="color: black; text-align: center;">BuzzKill</h1>
+        </div>
+    """
+    st.markdown(title_html, unsafe_allow_html=True)
+
+    # Set the subtitle and center it
+    subtitle = "<div style='text-align: center; color: black; padding: 10px; background-color: lightgrey; font-weight: bold;'>A helpful companion for solving the New York Times 'Spelling Bee' puzzle.</div>"
+    st.markdown(subtitle, unsafe_allow_html=True)
 
     common_pool = st.text_input("Enter today's letters (7 letters):", key="common_pool").upper().replace(" ", "")
 
