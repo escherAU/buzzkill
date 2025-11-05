@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG8KEL35MW"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-ZG8KEL35MW');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuzzKill</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="title-container" style="background-image: url('{{ url_for('static', filename='images/buzzkillheader.png') }}'); background-size: contain; background-position: center; background-repeat: no-repeat;">
+        </div>
+
+        <div id="loading" style="display: none;">
+        </div>
+
+        <div class="subtitle-container">
+            A helpful companion for solving the New York Times 'Spelling Bee' puzzle.
+        </div>
+
+        <div class="input-container">
+            <label for="common_pool">Enter today's letters (7 letters):</label>
+            <input type="text" id="common_pool" name="common_pool" class="custom-input" autocomplete="off">
+            <div id="common_pool_error" class="error-message"></div>
+        </div>
+
+        <div class="input-container">
+            <label for="filter_letter">Enter the center letter to filter the list:</label>
+            <input type="text" id="filter_letter" name="filter_letter" class="custom-input" autocomplete="off">
+            <div id="filter_letter_error" class="error-message"></div>
+        </div>
+
+        <button class="submit-button" id="submit-btn" onclick="fetchData()">Submit</button>
+
+        <div class="matching-words" id="matching-words">
+            <!-- This section will be dynamically populated based on user input -->
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // When the DOM content has been loaded
+                const submitBtn = document.getElementById("submit-btn");
+                const commonPoolInput = document.getElementById("common_pool");
+                const filterLetterInput = document.getElementById("filter_letter");
+
+                submitBtn.addEventListener("click", function() {
+                    // Show the loading div
+                    document.getElementById("loading").style.display = "block";
+                    fetchData();
+                });
+
+                commonPoolInput.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        fetchData();
+                    }
+                });
+
+                filterLetterInput.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        fetchData();
+                    }
+                });
+            });
+
+
+            function fetchData() {
+				const commonPool = document.getElementById("common_pool").value;
+				const filterLetter = document.getElementById("filter_letter").value;
+
+				// Remove spaces from the input values
+				const commonPoolClean = commonPool.replace(/\s/g, '');
+				const filterLetterClean = filterLetter.replace(/\s/g, '');
+
+				// Convert both to lower case for case-insensitive comparison
+				const commonPoolLower = commonPoolClean.toLowerCase();
+				const filterLetterLower = filterLetterClean.toLowerCase();
+
+				// Clear existing error messages
+				document.getElementById("common_pool_error").innerHTML = "";
+				document.getElementById("filter_letter_error").innerHTML = "";
+
+				// Validate input
+				if (commonPoolClean.length !== 7) {
+					document.getElementById("common_pool_error").innerHTML = `You have entered ${commonPoolClean.length} letters, please input 7 exactly.`;
+					return;
+				}
+
+				if (filterLetterClean.length !== 1 || !commonPoolLower.includes(filterLetterLower)) {
+					document.getElementById("filter_letter_error").innerHTML = "Please input exactly one center letter that is also part of the 7 letters you provided.";
+					return;
+				}
+
+				// Prepare the data to be sent to the server
+				const data = {
+					common_pool: commonPoolClean,
+					filter_letter: filterLetterClean
+				};
+
+                fetch('/process_input', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        displayResults(data);
+                    } else {
+                        displayError(data.message);
+                    }
+                })
+                .catch(error => {
+                    displayError('An error occurred while processing your request.');
+                });
+            }
+
+			function displayResults(data) {
+				let html = '';
+				for (const [letter, wordLengthData] of Object.entries(data.result)) {
+					html += `<h2 style="color: white; text-align: left;">${letter} (${data.counts[letter]} matching words)</h2>`;
+					for (const [wordLength, wordData] of Object.entries(wordLengthData)) {
+						html += `<div><span class="word-length">[${wordLength}]</span> `;
+						for (let i = 0; i < wordData.length; i++) {
+							const [word, isPangram] = wordData[i];
+							if (isPangram) {
+								html += `<span class="pangram">${word}</span>`;
+							} else {
+								html += word;
+							}
+							if (i < wordData.length - 1) {
+								html += ', ';
+							}
+						}
+						html += `</div>`;
+					}
+					html += `<br>`;
+				}
+				document.querySelector('.matching-words').innerHTML = html;
+			}
+
+            function displayError(message) {
+                document.querySelector('.matching-words').innerHTML = `<div class="error-message">${message}</div>`;
+            }
+        </script>
+
+        <footer>
+            <div id="copyright">
+                &copy; <a href="https://graemehimself.forsale" target="_blank" rel="noopener noreferrer">graeme r hay <span id="current-year"></span></a>
+            </div>
+        </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var currentYear = new Date().getFullYear();
+                document.getElementById('current-year').textContent = currentYear;
+            });
+        </script>
+    </div>
+</body>
+
+</html>
