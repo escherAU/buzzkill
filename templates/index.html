@@ -8,13 +8,12 @@
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
-
 	  gtag('config', 'G-ZG8KEL35MW');
-</script>
+	</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BuzzKill</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <<link rel="stylesheet" href="/static/styles.css">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
@@ -23,8 +22,7 @@
         <div class="title-container" style="background-image: url('{{ url_for('static', filename='images/buzzkillheader.png') }}'); background-size: contain; background-position: center; background-repeat: no-repeat;">
         </div>
 
-        <div id="loading" style="display: none;">
-        </div>
+        <div id="loading" style="display: none;"></div>
 
         <div class="subtitle-container">
             A helpful companion for solving the New York Times 'Spelling Bee' puzzle.
@@ -41,22 +39,31 @@
             <input type="text" id="filter_letter" name="filter_letter" class="custom-input" autocomplete="off">
             <div id="filter_letter_error" class="error-message"></div>
         </div>
+		
+
+		<div class="input-container input-toggle">
+		  <label class="bk-toggle">
+			<input type="checkbox" id="use-curated">
+			<span class="bk-box" aria-hidden="true"></span>
+			<span class="bk-text">Likely words only</span>
+			<span class="info-tip" data-tooltip="Curated list based on all previous NYT Spelling Bee puzzles. Click to toggle on and off.">?</span>
+		  </label>
+		</div>
 
         <button class="submit-button" id="submit-btn" onclick="fetchData()">Submit</button>
 
         <div class="matching-words" id="matching-words">
-            <!-- This section will be dynamically populated based on user input -->
+            <!-- dynamically populated -->
         </div>
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // When the DOM content has been loaded
                 const submitBtn = document.getElementById("submit-btn");
                 const commonPoolInput = document.getElementById("common_pool");
                 const filterLetterInput = document.getElementById("filter_letter");
+                const curatedToggle = document.getElementById("use-curated"); // NEW
 
                 submitBtn.addEventListener("click", function() {
-                    // Show the loading div
                     document.getElementById("loading").style.display = "block";
                     fetchData();
                 });
@@ -74,26 +81,35 @@
                         fetchData();
                     }
                 });
-            });
 
+                // 🔁 Live toggle: re-fetch automatically when switched
+                let toggleTimer;
+                curatedToggle.addEventListener("change", function () {
+                    const common = document.getElementById("common_pool").value.replace(/\s/g, '');
+                    const center = document.getElementById("filter_letter").value.replace(/\s/g, '');
+                    if (common.length !== 7 || center.length !== 1 || !common.toLowerCase().includes(center.toLowerCase())) {
+                        return; // avoid triggering errors for incomplete input
+                    }
+                    document.getElementById("loading").style.display = "block";
+                    clearTimeout(toggleTimer);
+                    toggleTimer = setTimeout(fetchData, 150);
+                });
+            });
 
             function fetchData() {
 				const commonPool = document.getElementById("common_pool").value;
 				const filterLetter = document.getElementById("filter_letter").value;
+				const useCurated = document.getElementById("use-curated").checked; // NEW
 
-				// Remove spaces from the input values
 				const commonPoolClean = commonPool.replace(/\s/g, '');
 				const filterLetterClean = filterLetter.replace(/\s/g, '');
 
-				// Convert both to lower case for case-insensitive comparison
 				const commonPoolLower = commonPoolClean.toLowerCase();
 				const filterLetterLower = filterLetterClean.toLowerCase();
 
-				// Clear existing error messages
 				document.getElementById("common_pool_error").innerHTML = "";
 				document.getElementById("filter_letter_error").innerHTML = "";
 
-				// Validate input
 				if (commonPoolClean.length !== 7) {
 					document.getElementById("common_pool_error").innerHTML = `You have entered ${commonPoolClean.length} letters, please input 7 exactly.`;
 					return;
@@ -104,17 +120,15 @@
 					return;
 				}
 
-				// Prepare the data to be sent to the server
 				const data = {
 					common_pool: commonPoolClean,
-					filter_letter: filterLetterClean
+					filter_letter: filterLetterClean,
+					use_curated: useCurated // NEW
 				};
 
                 fetch('/process_input', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data),
                 })
                 .then(response => response.json())
@@ -125,7 +139,7 @@
                         displayError(data.message);
                     }
                 })
-                .catch(error => {
+                .catch(() => {
                     displayError('An error occurred while processing your request.');
                 });
             }
@@ -173,5 +187,4 @@
         </script>
     </div>
 </body>
-
 </html>

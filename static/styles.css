@@ -22,10 +22,10 @@
 }
 
 .submit-button {
-    background: linear-gradient(to bottom, #ff7f00, #ff5500);
+    background: linear-gradient(to bottom, #fffe22, #cccb1b);
     border: none;
     border-radius: 4px;
-    color: white;
+    color: black;
     padding: 10px;
     text-align: center;
     font-size: 16px;
@@ -146,9 +146,9 @@ h1, h2, h3 {
 .subtitle-container {
 	width: 100%;
     text-align: center;
-    color: black;
+    color: f7da21;
     padding: 5px;
-    background-color: lightgrey;
+    background-color: black;
     font-weight: bold;
 }
 
@@ -214,5 +214,140 @@ input[type="text"] {
 #copyright a:visited {
     text-decoration: none;
     color: inherit; 
+	
 }
 
+/* === BuzzKill custom checkbox (hidden input + styled box) === */
+.bk-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* hide native checkbox but keep accessible */
+.bk-toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* visible box */
+.bk-box {
+  width: 26px;
+  height: 26px;
+  border: 2px solid #ffdd33;
+  border-radius: 6px;
+  background: transparent;
+  display: inline-block;
+  position: relative;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+/* hover affordance */
+.bk-toggle:hover .bk-box {
+  box-shadow: 0 0 6px rgba(255,221,51,.6);
+  transform: scale(1.00);
+}
+
+/* checked: yellow fill + black tick */
+.bk-toggle input[type="checkbox"]:checked + .bk-box {
+  background: #ffdd33;
+  border-color: #ffdd33;
+}
+.bk-toggle input[type="checkbox"]:checked + .bk-box::after {
+  content: "✓";
+  color: #000;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 26px;
+  position: absolute;
+  left: 6px;
+  top: -1px;
+}
+
+/* keyboard focus ring */
+.bk-toggle input[type="checkbox"]:focus-visible + .bk-box {
+  outline: 2px solid #ffdd33;
+  outline-offset: 2px;
+}
+
+/* label text next to box */
+.bk-text {
+  color: #ffdd33;
+  font-weight: 600;
+  line-height: 1;
+}
+
+
+/* Fix the label rule first */
+label[for="use-curated"] {
+  color: #ffdd33;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Remove all the duplicate rules and use this clean version */
+.info-tip {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #ffdd33;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  margin-left: 8px;
+  border: 2px solid #ffdd33;
+  transition: all 0.2s ease-in-out;
+}
+
+.info-tip:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 221, 51, 0.8);
+}
+
+/* Tooltip bubble */
+.info-tip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #ffdd33;
+  border: 1px solid #ffdd33;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  margin-top: 8px;
+  z-index: 1000;
+}
+
+/* Tooltip arrow */
+.info-tip::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: #ffdd33;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  margin-top: 2px;
+  z-index: 1001;
+}
+
+.info-tip:hover::after,
+.info-tip:hover::before {
+  opacity: 1;
+}
