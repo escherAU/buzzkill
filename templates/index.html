@@ -69,6 +69,8 @@
 				  aria-label="What does 'Likely words only' mean?"
 				  data-tooltip="Curated list based on all previous NYT Spelling Bee puzzles. Click to toggle on and off.">?</button>
 		</div>
+		
+		<div id="summary-count" class="summary-count" aria-live="polite"></div>
 
         <div class="matching-words" id="matching-words"></div>
 
@@ -180,38 +182,38 @@ function fetchData() {
 
 
 function displayResults(data) {
+    // total across all first-letter buckets
+    const total = Object.values(data.counts || {}).reduce((a, b) => a + b, 0);
+
+    // summary line
+    const summaryEl = document.getElementById('summary-count');
+    summaryEl.innerHTML = `<span class="count-pill">Found <strong>${total}</strong> matching word${total !== 1 ? 's' : ''}</span>`;
+
+    // existing grouped rendering
     let html = '';
-
     for (const [letter, wordLengthData] of Object.entries(data.result)) {
-
-        html += `<h2>${letter} (${data.counts[letter]} matching words)</h2>`;
-
-        for (const [wordLength, wordData] of Object.entries(wordLengthData)) {
-            html += `<div><span class="word-length">[${wordLength}]</span> `;
-
-            for (let i = 0; i < wordData.length; i++) {
-                const [word, isPangram] = wordData[i];
-                html += isPangram
-                    ? `<span class="pangram">${word}</span>`
-                    : word;
-
-                if (i < wordData.length - 1) html += ', ';
-            }
-
-            html += `</div>`;
+      html += `<h2 style="color: white; text-align: left;">${letter} (${data.counts[letter]} matching words)</h2>`;
+      for (const [wordLength, wordData] of Object.entries(wordLengthData)) {
+        html += `<div><span class="word-length">[${wordLength}]</span> `;
+        for (let i = 0; i < wordData.length; i++) {
+          const [word, isPangram] = wordData[i];
+          html += isPangram ? `<span class="pangram">${word}</span>` : word;
+          if (i < wordData.length - 1) html += ', ';
         }
-
-        html += `<br>`;
+        html += `</div>`;
+      }
+      html += `<br>`;
     }
-
     document.querySelector('.matching-words').innerHTML = html;
-}
+    document.getElementById("loading").style.display = "none";
+  }
 
-
-function displayError(message) {
-    document.querySelector('.matching-words').innerHTML =
-        `<div class="error-message">${message}</div>`;
-}
+  function displayError(message) {
+    document.getElementById('summary-count').innerHTML = '';
+    document.querySelector('.matching-words').innerHTML = `<div class="error-message">${message}</div>`;
+    document.getElementById("loading").style.display = "none";
+  }
+  
 </script>
 
 </body>

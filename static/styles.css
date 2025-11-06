@@ -154,6 +154,21 @@ h1, h2, h3 {
     font-weight: bold;
 }
 
+.summary-count {
+  margin: 8px 0 12px;
+}
+
+.count-pill {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #0f131d;
+  border: 1px solid rgba(255,255,255,.06);
+  color: #ffdd33;
+  font-weight: 700;
+}
+
+
 /* Input Container */
 .input-container {
     width: 100%;  /* Make it the same width as the container */
