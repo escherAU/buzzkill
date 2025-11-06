@@ -26,7 +26,7 @@
     border: none;
     border-radius: 4px;
     color: black;
-    padding: 10px;
+    padding: 4px;
     text-align: center;
     font-size: 16px;
 	font-weight: bold;
@@ -72,6 +72,8 @@ h1 {
 .title-container {
 	height: 250px;
     width: 100%;
+	margin-bottom: 0 !important;   /* REMOVE gap under header */
+    padding-bottom: 0 !important;
     padding-top: 25.00%; /* This is 100% divided by the aspect ratio, which is approximately 3 */
     background-color: #F7DA21;
     background-image: url('{{ url_for('static', filename='images/buzzkillheader.png') }}');
@@ -217,137 +219,330 @@ input[type="text"] {
 	
 }
 
-/* === BuzzKill custom checkbox (hidden input + styled box) === */
+/* --- Toggle row (checkbox + label + help) --- */
+.input-toggle-row {
+  display: flex;
+  align-items: middle;
+  gap: 4px;
+  position: relative;
+  margin: var(--s-16) 0;
+
+  min-height: 16px; /* Ensure consistent height */
+}
+
+/* Checkbox + label */
 .bk-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  height: 20px;
+  line-height: 24px;
+  margin: 0; /* Remove any default margins */
 }
 
-/* hide native checkbox but keep accessible */
 .bk-toggle input[type="checkbox"] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 
-/* visible box */
 .bk-box {
-  width: 26px;
-  height: 26px;
-  border: 2px solid #ffdd33;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--bk-accent);
   border-radius: 6px;
   background: transparent;
-  display: inline-block;
   position: relative;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
-/* hover affordance */
 .bk-toggle:hover .bk-box {
-  box-shadow: 0 0 6px rgba(255,221,51,.6);
-  transform: scale(1.00);
+  box-shadow: 0 0 6px rgba(255, 221, 51, .6);
+  transform: scale(1.03);
 }
 
-/* checked: yellow fill + black tick */
 .bk-toggle input[type="checkbox"]:checked + .bk-box {
-  background: #ffdd33;
-  border-color: #ffdd33;
+  background: var(--bk-accent);
+  border-color: var(--bk-accent);
 }
+
 .bk-toggle input[type="checkbox"]:checked + .bk-box::after {
   content: "✓";
-  color: #000;
-  font-size: 18px;
+  color: var(--bk-accent-ink);
+  font-size: 16px;
   font-weight: 900;
-  line-height: 26px;
+  line-height: 20px;
   position: absolute;
   left: 6px;
-  top: -1px;
+  top: 0;
 }
 
-/* keyboard focus ring */
-.bk-toggle input[type="checkbox"]:focus-visible + .bk-box {
-  outline: 2px solid #ffdd33;
-  outline-offset: 2px;
-}
-
-/* label text next to box */
 .bk-text {
-  color: #ffdd33;
-  font-weight: 600;
-  line-height: 1;
+  color: var(--bk-accent);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
-
-/* Fix the label rule first */
-label[for="use-curated"] {
-  color: #ffdd33;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Remove all the duplicate rules and use this clean version */
+/* Help (?) button + tooltip */
 .info-tip {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 24px;
+  min-width: 24px;
   border-radius: 50%;
-  background: #ffdd33;
-  color: #000;
-  font-size: 16px;
-  font-weight: bold;
+  background: var(--bk-accent);
+  color: var(--bk-accent-ink);
+  font-size: 14px;
+  font-weight: 900;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid var(--bk-accent);
   cursor: pointer;
   position: relative;
-  margin-left: 8px;
-  border: 2px solid #ffdd33;
-  transition: all 0.2s ease-in-out;
+  z-index: 3;
+  transition: transform .15s ease, box-shadow .15s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+  margin: 0; /* Remove any default margins */
 }
 
 .info-tip:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 8px rgba(255, 221, 51, 0.8);
+  transform: scale(1.06);
+  box-shadow: 0 0 8px rgba(255, 221, 51, .8);
 }
 
-/* Tooltip bubble */
 .info-tip::after {
   content: attr(data-tooltip);
   position: absolute;
-  top: 100%;
+  bottom: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   background: #000;
-  color: #ffdd33;
-  border: 1px solid #ffdd33;
+  color: var(--bk-accent);
+  border: 1px solid var(--bk-accent);
   padding: 8px 12px;
   font-size: 12px;
   border-radius: 6px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease-in-out;
-  margin-top: 8px;
-  z-index: 1000;
+  transition: opacity .2s ease-in-out;
+  z-index: 9999;
 }
 
-/* Tooltip arrow */
 .info-tip::before {
   content: "";
   position: absolute;
-  top: 100%;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-bottom-color: #ffdd33;
+  border-top-color: var(--bk-accent);
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease-in-out;
-  margin-top: 2px;
-  z-index: 1001;
+  transition: opacity .2s ease-in-out;
+  z-index: 10000;
 }
 
 .info-tip:hover::after,
 .info-tip:hover::before {
   opacity: 1;
+}
+
+
+/* ====== BuzzKill Design Tokens ====== */
+:root{
+  --bk-bg: #0e1117;
+  --bk-surface: #121621;
+  --bk-surface-2: #0f131d;
+  --bk-text: #fafafa;
+  --bk-subtle: #b9c0cf;
+  --bk-accent: #ffdd33;
+  --bk-accent-ink: #000;
+
+  /* spacing scale */
+  --s-2: 2px;
+  --s-4: 4px;
+  --s-6: 6px;
+  --s-8: 8px;
+  --s-12: 12px;
+  --s-16: 16px;
+  --s-20: 20px;
+  --s-24: 24px;
+  --s-32: 32px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-1: 0 6px 20px rgba(0,0,0,.25);
+  --shadow-2: 0 10px 30px rgba(0,0,0,.35);
+}
+
+body { background: var(--bk-bg); color: var(--bk-text); }
+
+/* ====== Layout Cards ====== */
+.container { max-width: 960px; width: 90%; }
+
+.card {
+  background: var(--bk-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: var(--s-24);
+  margin-top: var(--s-24);
+}
+
+/* Hero/banner with rounded corners */
+.hero {
+  border: 10px solid #1d212a !important;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #f7da21;
+  box-shadow: var(--shadow-1);
+  margin: var(--s-24) 0 var(--s-16);
+}
+.hero__img {
+  width: 100%;
+  aspect-ratio: 3.2 / 1;     /* keeps nice banner height */
+  background: #f7da21 center/contain no-repeat;
+  /* your image is still set inline in HTML via style attr */
+}
+
+/* Subtitle sits on the hero edge like a pill */
+.subtitle-container {
+  display: inline-block;
+  margin: var(--s-12) 0 var(--s-16);
+  padding: var(--s-8) var(--s-12);
+  background: var(--bk-surface-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius-sm);
+  color: var(--bk-accent);
+  font-weight: 700;
+}
+
+/* ====== Inputs & Buttons ====== */
+.input-container { margin: var(--s-16) 0; }
+
+.input-container label {
+  display: block;
+  margin-bottom: var(--s-6);
+  color: var(--bk-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 2px solid #000;
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+}
+.custom-input:focus {
+  outline: none;
+  border-color: var(--bk-accent);
+  box-shadow: 0 0 0 3px rgba(255,221,51,.35);
+}
+
+/* Button */
+.submit-button {
+  display: inline-flex;
+  gap: var(--s-8);
+  align-items: center;
+  background: linear-gradient(to bottom, #fffe22, #cccb1b);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 rgba(0,0,0,.3);
+  transform: translateY(0);
+  transition: transform .05s ease, box-shadow .1s ease;
+  margin-top: var(--s-12);
+}
+.submit-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 rgba(0,0,0,.35);
+}
+
+/* ====== Toggle Row Alignment ====== */
+.input-toggle { margin: var(--s-12) 0 var(--s-20); }
+
+.bk-toggle {
+  display: inline-flex;
+  align-items: center;            /* centers everything vertically */
+  gap: var(--s-12);
+  line-height: 1;                 /* removes extra baseline wobble */
+}
+
+.bk-toggle input[type="checkbox"] {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+
+.bk-box {
+  width: 24px; height: 24px;
+  border: 2px solid var(--bk-accent);
+  border-radius: 6px;
+  background: transparent;
+  display: inline-block;
+  position: relative;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.bk-toggle:hover .bk-box { box-shadow: 0 0 6px rgba(255,221,51,.6); transform: scale(1.03); }
+
+.bk-toggle input[type="checkbox"]:checked + .bk-box {
+  background: var(--bk-accent);
+  border-color: var(--bk-accent);
+}
+.bk-toggle input[type="checkbox"]:checked + .bk-box::after {
+  content: "✓";
+  color: var(--bk-accent-ink);
+  font-size: 16px; font-weight: 900; line-height: 24px;
+  position: absolute; left: 6px; top: -1px;
+}
+
+.bk-text { color: var(--bk-accent); font-weight: 700; }
+
+/* Tooltip tweak so it sits perfectly centered with the row */
+.info-tip { margin-left: 2px; transform: translateY(2px); }
+
+/* ====== Results ====== */
+.matching-words h2 {
+  font-size: 18px;
+  margin: var(--s-16) 0 var(--s-8);
+  color: var(--bk-text);
+}
+.word-length { font-weight: 800; font-size: 0.95rem; color: var(--bk-subtle); }
+.pangram { font-weight: 900; color: var(--bk-accent); }
+
+/* ====== Footer ====== */
+#copyright { color: var(--bk-subtle); margin-top: var(--s-16); }
+
+/* ====== Responsive ====== */
+@media (max-width: 720px){
+  .container { width: 92%; }
+  .card { padding: var(--s-16); }
+  .matching-words h2 { font-size: 16px; }
+}
+
+.subtitle-standalone {
+    margin-top: 0;              /* remove gap ABOVE */
+    padding-top: 0;
+    margin-bottom: 25px;        /* keep spacing BELOW */
+    font-size: 1.1rem;
+    text-align: center;
+    background-color: transparent !important;
+    padding-bottom: 0 !important;
+}
+
+/* Remove the space under the yellow banner */
+.hero {
+  margin-bottom: 0 !important;
+}
+
+/* Keep no space above the subtitle */
+.subtitle-standalone {
+  margin-top: -6px !important;  /* pull it up slightly */
 }
